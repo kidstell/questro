@@ -1,0 +1,33 @@
+Question {{last_q}} <br><br>
+{{question}}
+
+<form method="POST">
+    {% csrf_token %}
+    <ul>
+        {% for option in options %}
+        <li>
+            {% if selected_option == option.id %}
+            <input type="radio" name="arcade-options" id="arcade-options-{{option.id}}" value="{{option.id}}"
+                checked="checked">
+            {% else %}
+            <input type="radio" name="arcade-options" id="arcade-options-{{option.id}}" value="{{option.id}}">
+            {% endif %}
+
+            <label for="arcade-options-{{option.id}}">{{option.option}}</label>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <br>
+
+
+    <input type="hidden" id="last_q" name="last_q" value="{{last_q}}">
+    <button id="prev" name="prev" type="submit" value="1">Prev</button>
+    <button id="next" name="next" type="submit" value="1">Next</button>
+
+    <br><br><br><br>
+    <a href="{% url 'home' %}">Return Home</a>
+    <button id="quit" name="quit" type="submit" value="1">Quit</button>
+    <button id="submit" name="submit" type="submit" value="1">Submit</button>
+
+</form>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/base/style.css' %}">
+</head>
+
+<body>
+
+
+    <div class="head-pane">
+        <div class="header-row">
+            <div class="header-left-content">
+                <h2 class="banner">The Questro App</h2>
+            </div>
+            <div class="header-right-content">
+                {% if request.user.is_authenticated %}
+                <span class="user-icon">
+                    {% load static %} <img src="{% static '/base/img/001-user.png' %}" alt="user icon" />
+                </span>
+                <span class="user-name">{{request.user}}</span>
+                <span class="user-action"><a href="{% url 'logout' %}">Logout</a></span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="cont">
+        <div class="left-pane quiz-list">
+            <h3>Start A new Quiz Arcade</h3>
+            <ul>
+                {% for subject in subjects %}
+                <li>
+                    {{subject}}
+                    {% for plan in plans %}
+                    <!-- <a class="btn-quiz-action-{{plan|lower}}" href="/startarcade/{{plan.id}}&subject={{subject.id}}">{{plan}}</a> -->
+                    <a class="btn-quiz-action-{{plan|lower}}"
+                        href="/startarcade/plan/{{plan.id}}/subject/{{subject.id}}">{{plan}}</a>
+                    {% empty %}
+                    <small>No quiz</small>
+                    {% endfor %}
+                </li>
+                {% empty %}
+                <h3>No Quiz Plans available. Contact Admin</h3>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="right-pane">
+            <p>You have {{count}} on going Quiz Arcades</p>
+            <ul class="quiz-history">
+                {% for history in quiz_history %}
+                <li class="quiz-history-item">
+                    {{history.subject}}
+                    {% if history.complete == True %}
+                    [score: {{history.getScore}}%]
+                    <br>
+                    <a
+                        href="startarcade/plan/{{history.plan_id}}/subject/{{history.subject_id}}/session/{{history.id}}">preview</a>
+                    {% else %}
+                    <br>
+                    <a
+                        href="startarcade/plan/{{history.plan_id}}/subject/{{history.subject_id}}/session/{{history.id}}">continue</a>
+                    <!-- <a href="quitarcade/session/{{history.id}}">quit</a> -->
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
